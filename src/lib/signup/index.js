@@ -1,0 +1,1 @@
+/*template strings e eventos do cadastro*/ 
