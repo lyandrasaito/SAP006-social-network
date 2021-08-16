@@ -4,9 +4,18 @@ export default () => {
     const container = document.createElement('div');
 
     const template = `
-    <h1>Boas vindas</h1>
-    <button type="button" id="entrar">Entrar</button>
-    <button type="button" id="cadastrar">Cadastrar</button>
+        <div class="content flexBox">
+            <!--<div class="mondrian">-->
+                <div class="area flexBox borda">
+                    <img src="img/icon.jpeg" width="30%"/> 
+                    <img src="img/logo.jpeg" width="50%"/> 
+                    <form class="flexBox">
+                        <button type="button" id="cadastrar" class="button">Cadastre-se</button>
+                        <button type="button" id="entrar" class="button">Login</button>
+                    </form>
+                </div>
+            <!--</div>-->
+        </div>
     `;
     container.innerHTML = template;
 

@@ -28,8 +28,6 @@ const init = () => {
             break;
         default:
             main.appendChild(welcome());
-
-
     }
 };
 
