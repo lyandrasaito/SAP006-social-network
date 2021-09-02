@@ -26,20 +26,13 @@ const init = () => {
         case "#feed":
             main.appendChild(feed());
             break;
+        case "#welcome":
+            main.appendChild(welcome());
+            break;
         default:
             main.appendChild(welcome());
     }
 };
 
-/*
-window.addEventListener("load", () => {
-    main.appendChild(welcome());
-    init();
-})
-*/
-
-/*window: objeto javascript que representa a janela do navegador*/
-/*load: carregamento da janela*/
-/*chamar o init pra verificar toda vez que a tela for alterada ou o hash*/
 window.addEventListener('load', init);
 window.addEventListener('hashchange', init);

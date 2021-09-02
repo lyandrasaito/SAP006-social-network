@@ -1,4 +1,18 @@
-//métodos que fazem conexão com o Firebase
+/*métodos que fazem conexão com o Firebase*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 const cad = firebase.auth().createUserWithEmailAndPassword(email, senha).then((credencial) => {
     console.log(credencial.user);
