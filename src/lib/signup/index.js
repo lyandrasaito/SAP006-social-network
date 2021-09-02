@@ -20,12 +20,6 @@ export default () => {
 
     container.innerHTML = template;
 
-    /*
-    const cadastrar = container.querySelector('#cadastrar');
-    cadastrar.addEventListener('click', () => {
-        //window.location.hash = '#feed';
-    });*/
-
     //Escutando o submit do formulário
     const formCadastro = container.querySelector('#signUp');
     formCadastro.addEventListener('submit', (e) => {
