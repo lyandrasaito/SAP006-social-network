@@ -24,21 +24,6 @@ export default () => {
   container.innerHTML = template;
 
 
-  /*
-  const ap = container.querySelector('#btnDelete');
- // const deleteButton = ap.target.dataset.btnDelete;
-  if (ap) {
-    const deleteConfirmation = window.confirm('Deseja realmente apagar o post?');
-    if (deleteConfirmation) {
-      deletePost(ap)
-        .then(() => {
-          loadPosts();
-        });
-    } else {
-      return false;
-    }
-  }*/
-
 
   const posts = container.querySelector('#postForm');
   posts.addEventListener('submit', (e) => {
@@ -62,7 +47,7 @@ export default () => {
                   ${post.data().user_id}
                   
                   
-                  <button type="" id="btnDelete" class="button" data-func="${post.id}">Apagar</button>
+                  <button id="btnDelete" class="buttonDel button" data-delete="${post.id}">Apagar</button>
                   
               </p>
         </div>     
@@ -71,9 +56,19 @@ export default () => {
     document.getElementById("posts").innerHTML
       += postTemplate;
     ``
+
+    const listDel = document.getElementsByClassName("buttonDel")
+
+    for (let del of listDel){
+      del.addEventListener('click', (funcao))
+    }
+
+    function funcao() {
+      const id = this.dataset.delete;
+      deletePost(id);
+    }
+
   };
-
-
 
   function loadPosts() {
     const postsCollection = firebase.firestore().collection('posts');
@@ -83,6 +78,14 @@ export default () => {
       snap.forEach(post => {
         printPosts(post);
       });
+    });
+  }
+
+  function deletePost(postId) {
+    const postsCollection = firebase.firestore().collection('posts');
+    postsCollection.doc(postId).delete().then(doc => {
+      console.log('Post apagado.');
+      loadPosts();
     });
   }
 
