@@ -1,4 +1,4 @@
-/*template strings e eventos do feed*/
+import { logout, postar } from '../../services/index.js';
 
 export default () => {
   const container = document.createElement('div');
@@ -21,43 +21,37 @@ export default () => {
             </div>
         </div>
     `;
-
-
   container.innerHTML = template;
 
+
+  /*
+  const ap = container.querySelector('#btnDelete');
+ // const deleteButton = ap.target.dataset.btnDelete;
+  if (ap) {
+    const deleteConfirmation = window.confirm('Deseja realmente apagar o post?');
+    if (deleteConfirmation) {
+      deletePost(ap)
+        .then(() => {
+          loadPosts();
+        });
+    } else {
+      return false;
+    }
+  }*/
 
 
   const posts = container.querySelector('#postForm');
   posts.addEventListener('submit', (e) => {
+    const text = document.getElementById('postText').value;
     e.preventDefault();
-    const text = document.getElementById("postText").value;
-    const user = firebase.auth().currentUser;
-    const ordenar = new Date();
-    const today = new Date();
-    const dataPostagem = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear() + ' | ' + today.getHours() + ':' + (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
+    postar(text);
 
-    const post = {
-      text: text,
-      user_id: user.email,
-      likes: 0,
-      comments: [],
-      data: dataPostagem,
-      ord: ordenar
-    }
+    loadPosts();
 
-    const postsCollection = firebase.firestore().collection("posts")
-    postsCollection.add(post).then(res => {
-      document.getElementById("postText").value = "";
-      loadPosts();
-
-
-
-    })
   });
 
   loadPosts();
-  function addPosts(post) {
-
+  function printPosts(post) {
     const postTemplate =
       `
         <div class="post" id='${post.id}'>
@@ -68,7 +62,7 @@ export default () => {
                   ${post.data().user_id}
                   
                   
-                  <button type="" id="apagar" class="button" data-func="apagar">Apagar</button>
+                  <button type="" id="btnDelete" class="button" data-func="${post.id}">Apagar</button>
                   
               </p>
         </div>     
@@ -77,41 +71,26 @@ export default () => {
     document.getElementById("posts").innerHTML
       += postTemplate;
     ``
-  }
+  };
+
+
 
   function loadPosts() {
-    const postsCollection = firebase.firestore().collection("posts")
+    const postsCollection = firebase.firestore().collection('posts');
     const banana = container.querySelector('#posts');
-    banana.innerHTML = "Carregando..."
     postsCollection.orderBy('ord', 'desc').get().then(snap => {
-      banana.innerHTML = ""
+      banana.innerHTML = '';
       snap.forEach(post => {
-        addPosts(post)
-      })
+        printPosts(post);
+      });
     });
   }
 
-  function deletePost(postId) {
-    const postsCollection = firebase.firestore().collection("posts");
-    postsCollection.doc(postId).delete().then(doc => {
-      console.log("Post apagado.");
-      //loadPosts();
-    })
-  }
-
-  //loadPosts();
-  //deletePost("");
-
-
-
-  const logout = container.querySelector('#logout');
-  logout.addEventListener('click', (e) => {
+  const sair = container.querySelector('#logout');
+  sair.addEventListener('click', (e) => {
     e.preventDefault();
-    firebase.auth().signOut().then(() => {
-      window.location.hash = '#welcome';
-      console.log("O usuário fez logout.")
-    });
+    logout();
   });
 
   return container;
-}
+};
