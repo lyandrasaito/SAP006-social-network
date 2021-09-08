@@ -51,21 +51,21 @@ export const logout = () => {
   });
 };
 
-export const getPosts = () => firebase.firestore().collection('posts');
-
 export const postar = (text) => {
   const user = firebase.auth().currentUser;
+  const photoURL = user.photoURL;
   const ordenar = new Date();
   const today = new Date();
   const dataPostagem = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear() + ' | ' + today.getHours() + ':' + (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
 
   const post = {
     text: text,
-    user_id: user.email,
+    email: user.email,
     likes: 0,
     comments: [],
     data: dataPostagem,
     ord: ordenar,
+    photo: photoURL,
   };
 
   const postsCollection = firebase.firestore().collection('posts');
@@ -74,10 +74,11 @@ export const postar = (text) => {
   });
 };
 
-  /*
-  function deletePost(postId) {
-    const postsCollection = firebase.firestore().collection('posts');
-    postsCollection.doc(postId).delete().then(doc => {
-      console.log('Post apagado.');
-    });
-  }*/
+/*
+function deletePost(postId) {
+  const postsCollection = firebase.firestore().collection('posts');
+  postsCollection.doc(postId).delete().then(doc => {
+    console.log('Post apagado.');
+  });
+}*/
+
