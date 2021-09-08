@@ -6,8 +6,7 @@ export default () => {
   const template = `
         <div class="content flexBox">
             <div class="area flexBox">
-                <h3 class="flexBox">Feed</h3>
-                <img src="img/icon.jpeg" width="30%"/>
+                <img src="img/icon.jpeg" width="30%" class="flexbox"/>
                 <h3>Postar:</h3> 
                 <form id="postForm" class="flexBox">
                     <input type="textarea" class="entradas" id="postText" required/>
@@ -16,14 +15,13 @@ export default () => {
                 </form>
 
                 <div class="post flexBox">
-                    <p id="posts"> </p>
+                  <h3 class="flexBox">Feed</h3>
+                  <p id="posts" class=""> </p>
                 </div>
             </div>
         </div>
     `;
   container.innerHTML = template;
-
-
 
   const posts = container.querySelector('#postForm');
   posts.addEventListener('submit', (e) => {
@@ -36,37 +34,82 @@ export default () => {
   });
 
   loadPosts();
+
+  const showButtons = (post) => `
+    <button class="buttonDel button" data-delete="${post.id}">Apagar</button>
+    <button class="buttonEdit button" data-edit="${post.id}">Editar</button>
+`;
+
   function printPosts(post) {
     const postTemplate =
       `
         <div class="post" id='${post.id}'>
-              <p id='${post.id}'>
-                  ${post.data().text} | 
-                  ❤ ${post.data().likes} |
+              <p id='${post.id}' class="listaPosts">
+                 <textarea class="txtArea entradas flexBox" disabled>${post.data().text} </textarea>
+                 <span> ❤ ${post.data().likes} | </span>
                   ${post.data().data}
-                  ${post.data().user_id}
+                  ${post.data().email} 
                   
-                  
-                  <button id="btnDelete" class="buttonDel button" data-delete="${post.id}">Apagar</button>
+                  ${post.data().email === firebase.auth().currentUser.email ? showButtons(post) : ''}
                   
               </p>
         </div>     
         `
-
-    document.getElementById("posts").innerHTML
+    document.getElementById('posts').innerHTML
       += postTemplate;
     ``
 
-    const listDel = document.getElementsByClassName("buttonDel")
-
-    for (let del of listDel){
-      del.addEventListener('click', (funcao))
-    }
-
-    function funcao() {
+    const listDel = document.getElementsByClassName('buttonDel');
+    for (let del of listDel) {
+      del.addEventListener('click', (postDel))
+    };
+    function postDel() {
       const id = this.dataset.delete;
       deletePost(id);
-    }
+    };
+
+
+    const listEdit = document.getElementsByClassName('buttonEdit');
+    for (let edit of listEdit) {
+      edit.addEventListener('click', (postUpdate))
+    };
+
+    /*
+    function postUpdate() {
+      const id = this.dataset.edit;
+
+      const txtArea = document.getElementsByClassName('txtArea');
+      for (let area of txtArea) {
+        area.removeAttribute('disabled');
+        
+      };
+    };*/
+
+    function postUpdate(e) {
+      const toEdit = e.target.innerText === "Editar";
+
+      // Recupera <p> parent
+      const parent = e.target.parentNode;
+      // Acessa textarea mais próximo
+      const textArea = parent.querySelector('.txtArea');
+
+      if (toEdit) {
+        // Torna textarea editável  
+        textArea.removeAttribute('disabled');
+      } else {
+        // recupera id e texto do textarea
+        const id = e.target.dataset.edit;
+        const text = textArea.value;
+
+        // confirma e altera
+        const resultado = window.confirm("Deseja alterar o post selecionado?");
+        if (resultado) editPost(id, text);
+      }
+
+      // inverte texto
+      e.target.innerText = toEdit ? "Salvar" : "Editar";
+    };
+  
 
   };
 
@@ -83,11 +126,29 @@ export default () => {
 
   function deletePost(postId) {
     const postsCollection = firebase.firestore().collection('posts');
-    postsCollection.doc(postId).delete().then(doc => {
-      console.log('Post apagado.');
-      loadPosts();
-    });
+    const resultado = window.confirm("Deseja apagar o post selecionado?");
+    if (resultado) {
+      postsCollection.doc(postId).delete().then(doc => {
+        console.log('Post apagado.');
+        loadPosts();
+      });
+    } else {
+      return false;
+    }
   }
+
+  function editPost(id, newText) {
+    const postsCollection = firebase.firestore().collection('posts');
+    postsCollection.doc(id).update({
+      text: newText,
+    })
+      .then(() => {
+        true;
+        loadPosts();
+      }
+      )
+      .catch((error) => error)
+  };
 
   const sair = container.querySelector('#logout');
   sair.addEventListener('click', (e) => {

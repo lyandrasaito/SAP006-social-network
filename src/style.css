@@ -31,7 +31,8 @@ form {
 
 .area {
     margin-top: 50px;
-    width: 20%;
+    padding: 25px;
+    width: auto;
     border: 2px solid var(--azul);
     border-radius: 8px;
     min-height: 450px;
@@ -71,6 +72,7 @@ form {
     color: var(--azul);
     padding: 5px;
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 p{
