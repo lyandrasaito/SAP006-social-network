@@ -36,81 +36,97 @@ export default () => {
   loadPosts();
 
   const showButtons = (post) => `
-    <button class="buttonDel button" data-delete="${post.id}">Apagar</button>
-    <button class="buttonEdit button" data-edit="${post.id}">Editar</button>
+    <button class="buttonDel button" data-func="delete" data-delete="${post.id}">Apagar 🗑</button>
+    <button class="buttonEdit button" data-func="edit" data-edit="${post.id}">Editar 🖊️</button>
 `;
 
-  function printPosts(post) {
-    const postTemplate =
-      `
-        <div class="post" id='${post.id}'>
-              <p id='${post.id}' class="listaPosts">
-                 <textarea class="txtArea entradas flexBox" disabled>${post.data().text} </textarea>
-                 <span> ❤ ${post.data().likes} | </span>
-                  ${post.data().data}
-                  ${post.data().email} 
-                  
-                  ${post.data().email === firebase.auth().currentUser.email ? showButtons(post) : ''}
-                  
-              </p>
-        </div>     
-        `
-    document.getElementById('posts').innerHTML
-      += postTemplate;
-    ``
+  function createPost(post) {
+    // Cria div pro post
+    const postElement = document.createElement('div');
 
-    const listDel = document.getElementsByClassName('buttonDel');
-    for (let del of listDel) {
-      del.addEventListener('click', (postDel))
-    };
-    function postDel() {
-      const id = this.dataset.delete;
-      deletePost(id);
-    };
+    // configura id e classe
+    postElement.id = post.id;
+    postElement.className += "post";
+    
+    // configura conteudo 
+    postElement.innerHTML = `
+          <p class="listaPosts">
+             <textarea class="txtArea entradas flexBox" disabled>${post.data().text} </textarea>
+             <span> ❤ ${post.data().likes} | </span>
+              ${post.data().data}
+              ${post.data().email} 
+              
+              ${post.data().email === firebase.auth().currentUser.email ? showButtons(post) : ''}
+          </p>
+    `;
 
+    // <div class="post" id='${post.id}'>
+    // document.getElementById('posts').innerHTML
+    //   += postTemplate;
+    // ``
 
-    const listEdit = document.getElementsByClassName('buttonEdit');
-    for (let edit of listEdit) {
-      edit.addEventListener('click', (postUpdate))
-    };
+    // Adiciona listener para os botoes
+    postElement.addEventListener('click', (event) => {
+      // Botão Editar
+      if (event.target.dataset.func === 'edit') {
 
-    /*
-    function postUpdate() {
-      const id = this.dataset.edit;
+        // Checa se o texto é editar ou salvar
+        const toEdit = event.target.innerText === "Editar 🖊️";
 
-      const txtArea = document.getElementsByClassName('txtArea');
-      for (let area of txtArea) {
-        area.removeAttribute('disabled');
-        
-      };
-    };*/
+        // Acessa textarea mais próximo
+        const textArea = postElement.querySelector('.txtArea');
 
-    function postUpdate(e) {
-      const toEdit = e.target.innerText === "Editar";
+        // Se for "Editar"
+        if (toEdit) {
+          // Torna textarea editável  
+          textArea.removeAttribute('disabled');
+        } else { // Se for "Salvar"
+          // Recupera id do post e texto do textarea
+          const id = event.target.dataset.edit;
+          const text = textArea.value;
 
-      // Recupera <p> parent
-      const parent = e.target.parentNode;
-      // Acessa textarea mais próximo
-      const textArea = parent.querySelector('.txtArea');
+          // confirma e altera
+          const resultado = window.confirm("Deseja alterar o post selecionado?");
+          if (resultado) editPost(id, text);
+        }
 
-      if (toEdit) {
-        // Torna textarea editável  
-        textArea.removeAttribute('disabled');
-      } else {
-        // recupera id e texto do textarea
-        const id = e.target.dataset.edit;
-        const text = textArea.value;
-
-        // confirma e altera
-        const resultado = window.confirm("Deseja alterar o post selecionado?");
-        if (resultado) editPost(id, text);
+        // inverte texto
+        event.target.innerText = toEdit ? "Salvar ✅" : "Editar 🖊️";
       }
 
-      // inverte texto
-      e.target.innerText = toEdit ? "Salvar" : "Editar";
-    };
-  
+      if (event.target.dataset.func === 'delete') {
+        const id = event.target.dataset.delete;
+        const resultado = window.confirm("Deseja apagar o post selecionado?");
+        if (resultado) deletePost(id);
+      }
 
+    });
+
+    // const listDel = document.getElementsByClassName('buttonDel');
+    // for (let del of listDel) {
+    //   console.log("adicionei listener no deletar");
+
+    //   del.addEventListener('click', (postDel))
+    // };
+
+    // function postDel() {
+    //   const id = this.dataset.delete;
+    //   deletePost(id);
+    // };
+
+
+    // const listEdit = document.getElementsByClassName('buttonEdit');
+    // for (let edit of listEdit) {
+    //   console.log("adicionei listener no editar");
+    //   edit.addEventListener('click', (postUpdate))
+    // };
+
+
+    return postElement;
+  };
+
+  function postUpdate(e) {
+    
   };
 
   function loadPosts() {
@@ -118,36 +134,31 @@ export default () => {
     const banana = container.querySelector('#posts');
     postsCollection.orderBy('ord', 'desc').get().then(snap => {
       banana.innerHTML = '';
+
+      // printa posts 
       snap.forEach(post => {
-        printPosts(post);
+        const postElement = createPost(post);
+        document.getElementById('posts').appendChild(postElement);
       });
     });
   }
 
   function deletePost(postId) {
     const postsCollection = firebase.firestore().collection('posts');
-    const resultado = window.confirm("Deseja apagar o post selecionado?");
-    if (resultado) {
       postsCollection.doc(postId).delete().then(doc => {
+        const postElement = document.getElementById(postId);
+        postElement.remove();
         console.log('Post apagado.');
-        loadPosts();
+        // loadPosts();
       });
-    } else {
-      return false;
-    }
+    
   }
 
   function editPost(id, newText) {
     const postsCollection = firebase.firestore().collection('posts');
     postsCollection.doc(id).update({
       text: newText,
-    })
-      .then(() => {
-        true;
-        loadPosts();
-      }
-      )
-      .catch((error) => error)
+    });
   };
 
   const sair = container.querySelector('#logout');
