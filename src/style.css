@@ -43,15 +43,16 @@ form {
     border-radius: 8px;
 }
 
-.entradas {
+.field {
     padding: 5px;
     margin: 5px;
-    width: 110px;
+    width: 80%;
+    height: 35%;
     border: 3px solid var(--azul);
     border-radius: 5px;
 }
 
-.entradas:focus {
+.field:focus {
     border: 3px solid var(--azul);
 }
 

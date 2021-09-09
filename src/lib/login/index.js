@@ -1,4 +1,4 @@
-import { entrar, logarGoogle } from '../../services/index.js';
+import { entrar, logarGoogle, redirect } from '../../services/index.js';
 
 export default () => {
   const container = document.createElement('div');
@@ -9,11 +9,12 @@ export default () => {
                 <h3 class="flexBox">Login</h3>
                 <img src="img/icon.jpeg" width="30%"/> 
                 <form class="flexBox" id="loginForm">
-                    <input type="email" id="email" class="entradas" placeholder="E-mail: ">
-                    <input type="password" id="senha" class="entradas" placeholder="Senha: ">
+                    <input type="email" id="email" class="field" placeholder="E-mail: ">
+                    <input type="password" id="senha" class="field" placeholder="Senha: ">
                     <button type="submit" class="button" id="entrar">Entrar</button>
                 </form>
-                <button type="" class="button" id="google">Google</button>
+                <button class="button" id="google">Google</button>
+                <button id="back" class="button">Voltar</button>
             </div>
         </div>
     `;
@@ -37,6 +38,12 @@ export default () => {
     e.preventDefault();
     logarGoogle();
   });
+
+  const goBack = container.querySelector('#back');
+  goBack.addEventListener('click', (e) => {
+    e.preventDefault();
+    redirect();
+  })
 
   return container;
 };

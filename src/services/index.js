@@ -70,15 +70,9 @@ export const postar = (text) => {
 
   const postsCollection = firebase.firestore().collection('posts');
   postsCollection.add(post).then(res => {
+    // Apenas limpa o campo
     document.getElementById('postText').value = '';
   });
 };
 
-/*
-function deletePost(postId) {
-  const postsCollection = firebase.firestore().collection('posts');
-  postsCollection.doc(postId).delete().then(doc => {
-    console.log('Post apagado.');
-  });
-}*/
-
+export const redirect = () => window.location.hash = '#welcome';
