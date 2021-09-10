@@ -2,6 +2,64 @@ import { logout, postar, redirect } from '../../services/index.js';
 
 export default () => {
 
+  const db = firebase.firestore();
+  const postsRef = db.collection("posts");
+
+  const likePost = (userId, postId) => {
+    // Referência do post
+    const postRef = postsRef.doc(postId);
+
+    // In a transaction, add the new rating and update the aggregate totals
+    // Em uma transação, adiciona o like e atualiza o total agregado
+    // https://firebase.google.com/docs/firestore/solutions/aggregation?hl=pt
+    return db.runTransaction((transaction) => {
+
+      return transaction.get(postRef).then((res) => {
+        if (!res.exists) {
+          throw "Post não existe!";
+        }
+
+        // Computa novo número de likes
+        const newNumLikes = (res.data().numLikes || 0) + 1;
+
+        // Commit para o Firestore
+        transaction.update(postRef, {
+          numLikes: newNumLikes,
+        });
+
+        transaction.set(postRef, { likes: { [userId]: true } }, { merge: true });
+      });
+    });
+  };
+
+  const unlikePost = (userId, postId) => {
+    // Referência do post
+    const postRef = postsRef.doc(postId);
+
+
+
+    // Em uma transação, adiciona o like e atualiza o total agregado
+    return db.runTransaction((transaction) => {
+      return transaction.get(postRef).then((res) => {
+        if (!res.exists) {
+          throw "Post não existe!";
+        }
+
+        // Computa novo número de likes
+        const newNumLikes = (res.data().numLikes) - 1;
+
+        // Commit para o Firestore
+        transaction.update(postRef, {
+          numLikes: newNumLikes,
+        });
+        //https://firebase.google.com/docs/firestore/solutions/aggregation?hl=pt
+        transaction.update(postRef, { likes: { [userId]: false } });
+      });
+    });
+  };
+
+
+
   const container = document.createElement('div');
   let unsubscribe, authUnsubscribe;
 
@@ -42,12 +100,16 @@ export default () => {
       // Carrega posts
       loadPosts();
 
-      const showButtons = (post) => `
-    <button class="buttonDel button" data-func="delete" data-delete="${post.id}">Apagar 🗑</button>
-    <button class="buttonEdit button" data-func="edit" data-edit="${post.id}">Editar 🖊️</button>
-`;
+      const showButtons = (postId) => `
+      <button class="buttonDel button" data-func="delete" data-delete="${postId}">Apagar 🗑</button>
+      <button class="buttonEdit button" data-func="edit" data-edit="${postId}">Editar 🖊️</button>
+  `;
 
-      function printPosts(post) {
+      function printPost(post) {
+        const user = firebase.auth().currentUser;
+        const postId = post.id;
+        const isOwner = post.email === user.email;
+        const userLiked = post.likes[user.uid];
 
         // Cria div para o post
         const postElement = document.createElement('div');
@@ -60,37 +122,37 @@ export default () => {
         postElement.innerHTML = `
           <p class="listaPosts">
              <textarea class="txtArea field flexBox" disabled>${post.text} </textarea>
-             <span> ❤ ${post.likes} | </span>
               ${post.data}
               ${post.email} 
-              
-              ${post.email === firebase.auth().currentUser.email ? showButtons(post) : ''}
+
+              <span ><span class="no-likes">${post.numLikes || 0}</span> <button data-func="${userLiked ? "unlike" : "like"}"  class="like_btn" style="color: ${userLiked ? "gray" : "red"}">❤</button> | </span>
+
+              ${isOwner ? showButtons(post) : ''}
           </p>
     `;
 
         // Adiciona listener para os botões
-        postElement.addEventListener('click', (event) => {
+        postElement.addEventListener("click", (event) => {
           // Botão Editar
-          if (event.target.dataset.func === 'edit') {
-
+          if (event.target.dataset.func === "edit") {
             // Checa se o texto é editar ou salvar
             const toEdit = event.target.innerText === "Editar 🖊️";
 
-            // Acessa textarea 
-            const textArea = postElement.querySelector('.txtArea');
+            // Acessa textarea
+            const textArea = postElement.querySelector(".txtArea");
 
             // Se for "Editar"
             if (toEdit) {
-              // Torna textarea editável  
-              textArea.removeAttribute('disabled');
-            } else { // Se for "Salvar"
+              // Torna textarea editável
+              textArea.removeAttribute("disabled");
+            } else {
+              // Se for "Salvar"
               // Recupera id do post e texto do textarea
-              const id = event.target.dataset.edit;
               const text = textArea.value;
 
               // confirma e altera
               const resultado = window.confirm("Deseja alterar o post selecionado?");
-              if (resultado) editPost(id, text);
+              if (resultado) editPost(postId, text);
             }
 
             // Inverte texto
@@ -98,12 +160,19 @@ export default () => {
           }
 
           // Verifica se o dataset é delete
-          if (event.target.dataset.func === 'delete') {
-            const id = event.target.dataset.delete;
+          if (event.target.dataset.func === "delete") {
             // Solicita confirmação do user
             const resultado = window.confirm("Deseja apagar o post selecionado?");
             // Se confimado, chama a função de deletar o post, passando o id
-            if (resultado) deletePost(id);
+            if (resultado) deletePost(postId);
+          }
+
+          if (event.target.dataset.func === "like") {
+            likePost(user.uid, postId);
+          }
+
+          if (event.target.dataset.func === "unlike") {
+            unlikePost(user.uid, postId);
           }
 
         });
@@ -115,15 +184,14 @@ export default () => {
       function loadPosts() {
         unsubscribe = firebase.firestore().collection('posts').orderBy('ord', 'asc')
           .onSnapshot((querySnapshot) => {
-            console.log("called");
             querySnapshot.docChanges().forEach((change) => {
               if (change.type === "added") {
                 // Recupera dados do post adicionado
                 const data = change.doc.data();
-                // Seta Id para ser acessado na função printPosts
+                // Seta Id para ser acessado na função printPost
                 data.id = change.doc.id;
                 // Cria post no template
-                const postElement = printPosts(data);
+                const postElement = printPost(data);
                 // Adiciona POST no começo do feed (template)
                 document.getElementById('posts').prepend(postElement);
               } else if (change.type === "removed") {
@@ -143,6 +211,32 @@ export default () => {
                 // Encontra textarea e atualiza o texto
                 const textArea = post.querySelector(".txtArea");
                 textArea.value = newText;
+
+
+
+                // novo texto
+                const userId = firebase.auth().currentUser.uid;
+
+                const numLikes = change.doc.data().numLikes || 0;
+                const userLiked = change.doc.data().likes[userId];
+
+                // encontra o post no DOM
+
+
+                // encontra textarea e atualiza o texto
+
+                const numLikesSpan = post.querySelector(".no-likes");
+                const likeBtn = post.querySelector(".like_btn");
+
+                // remove data-attribute e adiciona inverso
+                // delete likeBtn.dataset[userLiked ? "like" : "unlike"];
+                likeBtn.dataset.func = userLiked ? "unlike" : "like";
+
+                // altera cor
+                likeBtn.style.color = (userLiked ? "gray" : "red");
+
+                numLikesSpan.textContent = numLikes;
+
               }
             });
           });
@@ -165,7 +259,7 @@ export default () => {
         });
       };
 
-      
+
       const sair = container.querySelector('#logout');
       sair.addEventListener('click', (e) => {
         e.preventDefault();

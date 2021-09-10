@@ -53,7 +53,6 @@ export const logout = () => {
 
 export const postar = (text) => {
   const user = firebase.auth().currentUser;
-  const photoURL = user.photoURL;
   const ordenar = new Date();
   const today = new Date();
   const dataPostagem = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear() + ' | ' + today.getHours() + ':' + (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
@@ -61,11 +60,11 @@ export const postar = (text) => {
   const post = {
     text: text,
     email: user.email,
-    likes: 0,
+    numLikes: 0,
+    likes: {},
     comments: [],
     data: dataPostagem,
     ord: ordenar,
-    photo: photoURL,
   };
 
   const postsCollection = firebase.firestore().collection('posts');
