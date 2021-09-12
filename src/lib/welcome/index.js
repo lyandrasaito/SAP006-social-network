@@ -7,8 +7,8 @@ export default () => {
         <div class="content flexBox">
             <!--<div class="mondrian">-->
                 <div class="area flexBox borda">
-                    <img src="img/icon.jpeg" width="30%"/> 
-                    <img src="img/logo.jpeg" width="50%"/> 
+                    <img src="img/icon.png" class="icon"/> 
+                    <img src="img/logo.png" class="logo"/> 
                     <form class="flexBox">
                         <h3>Boas vindas!</h3>
                         <button type="button" id="cadastrar" class="button">Cadastre-se</button>

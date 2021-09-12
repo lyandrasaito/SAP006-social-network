@@ -70,15 +70,17 @@ export default () => {
       const template = `
         <div class="content flexBox">
             <div class="area flexBox">
-                <img src="img/icon.jpeg" width="30%" class="flexbox"/>
-                <h3>Postar:</h3> 
+                <img src="img/icon.png" class="icon"/>
+                <h2>Compartilhe sua arte: </h2> 
                 <form id="postForm" class="flexBox">
-                    <input type="textarea" class="field" id="postText" required/>
+                    <input type="textarea" class="typePost" id="postText" required/>
+                    <h4>Envie uma imagem (opcional): </h4>
+                    <input type="file" class="field" id="file" />
                     <button type="submit" class="button">Enviar</button>
                     <button type="" id="logout" class="button">Sair</button>
                 </form>
 
-                <div class="post flexBox">
+                <div class="postsArea flexBox">
                   <h3 class="flexBox">Feed</h3>
                   <p id="posts" class=""> </p>
                 </div>
@@ -87,11 +89,19 @@ export default () => {
     `;
       container.innerHTML = template;
 
+      let file;
+
       const posts = container.querySelector('#postForm');
+      const image = container.querySelector('#file');
+      image.onchange = function (event) {
+        file = event.target.files[0];
+      }
+
       posts.addEventListener('submit', (e) => {
         const text = document.getElementById('postText').value;
         e.preventDefault();
-        postar(text);
+        postar(text, file);
+        file = undefined;
 
         // loadPosts();
 
@@ -101,9 +111,10 @@ export default () => {
       loadPosts();
 
       const showButtons = (postId) => `
-      <button class="buttonDel button" data-func="delete" data-delete="${postId}">Apagar 🗑</button>
-      <button class="buttonEdit button" data-func="edit" data-edit="${postId}">Editar 🖊️</button>
+      <button class="buttonDel" data-func="delete" data-delete="${postId}">Apagar 🗑</button>
+      <button class="buttonEdit" data-func="edit" data-edit="${postId}">Editar 🖊️</button>
   `;
+
 
       function printPost(post) {
         const user = firebase.auth().currentUser;
@@ -116,16 +127,17 @@ export default () => {
 
         // configura id e classe
         postElement.id = post.id;
-        postElement.className += "post";
+        postElement.className += "posts flexBox";
 
         // configura conteudo 
         postElement.innerHTML = `
-          <p class="listaPosts">
-             <textarea class="txtArea field flexBox" disabled>${post.text} </textarea>
-              ${post.data}
-              ${post.email} 
+          <p class="flexBox">
+             <textarea class="txtArea flexBox" disabled>${post.text}</textarea>
+              ${post.data} | 
+              ${post.email}   
+              ${post.imageUrl ? `<img class="imgPost flexBox" src='${post.imageUrl}'` : ""}
 
-              <span ><span class="no-likes">${post.numLikes || 0}</span> <button data-func="${userLiked ? "unlike" : "like"}"  class="like_btn" style="color: ${userLiked ? "gray" : "red"}">❤</button> | </span>
+              <span ><span class="no-likes">${post.numLikes || 0}</span> <button data-func="${userLiked ? "unlike" : "like"}"  class="like_btn" style="color: ${userLiked ? "red" : "white"}">❤</button> </span>
 
               ${isOwner ? showButtons(post) : ''}
           </p>
@@ -233,7 +245,7 @@ export default () => {
                 likeBtn.dataset.func = userLiked ? "unlike" : "like";
 
                 // altera cor
-                likeBtn.style.color = (userLiked ? "gray" : "red");
+                likeBtn.style.color = (userLiked ? "red" : "white");
 
                 numLikesSpan.textContent = numLikes;
 

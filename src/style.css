@@ -1,81 +1,170 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 * {
-    --azul: #229EE4;
-    --amarelo: #fedc00;
-    --vermelho: #D03434;
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
+  --azul: #229EE4;
+  --amarelo: #fedc00;
+  --vermelho: #D03434;
+  --branco: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
 }
 
 form {
-    padding: 20px;
+  padding: 20px;
 }
 
 .flexBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .content {
-    width: 100%;
-    /*border: 2px solid var(--azul);*/
+  width: 100%;
+  /*border: 2px solid var(--vermelho);*/
 }
 
 .mondrian {
-    background: url(./img/mondrian.png) repeat center;
-    width: 25%;
-    border: 2px solid yellow;
+  background: url(./img/mondrian.png) repeat center;
+  width: 25%;
+  border: 2px solid yellow;
 }
 
 .area {
-    margin-top: 50px;
-    padding: 25px;
-    width: auto;
-    border: 2px solid var(--azul);
-    border-radius: 8px;
-    min-height: 450px;
+  margin-top: 50px;
+  padding: 25px;
+  width: 55%;
+  border: 2px solid var(--vermelho);
+  border-radius: 5px;
+  min-height: 450px;
+}
+
+.icon {
+  width: 150px;
+  margin-bottom: 10px;
+  margin-top: 50px;
+}
+
+.logo {
+  width: 50%;
 }
 
 .borda {
-    border: 5px solid black;
-    border-radius: 8px;
+  border: 5px solid black;
+  border-radius: 5px;
+  /*border-image: url(./img/mondrian.png) 30% round;*/
 }
 
 .field {
-    padding: 5px;
-    margin: 5px;
-    width: 80%;
-    height: 35%;
-    border: 3px solid var(--azul);
-    border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  width: 80%;
+  height: 35%;
+  border: 3px solid var(--azul);
+  border-radius: 5px;
 }
 
 .field:focus {
-    border: 3px solid var(--azul);
+  border: 3px solid var(--azul);
 }
 
 .button {
-    background-color: var(--azul);
-    color: white;
-    border: none;
-    border-radius: 2px;
-    width: 100px;
-    height: 25px;
-    padding: 5px;
-    margin: 5px;
+  background-color: var(--azul);
+  color: white;
+  border: none;
+  border-radius: 2px;
+  width: 150px;
+  height: 30px;
+  padding: 9px;
+  margin: 5px;
 }
 
-.post{
-    border: 2px solid var(--azul);
-    border-radius: 8px;
-    color: var(--azul);
-    padding: 5px;
-    margin-bottom: 5px;
-    margin-top: 10px;
+.buttonDel {
+  background-color: var(--vermelho);
+  color: white;
+  border: none;
+  width: 100px;
+  height: 30px;
+  padding: 5px;
+  margin: 5px;
 }
 
-p{
-    padding: 5px;
+.buttonEdit {
+  background-color: var(--amarelo);
+  color: white;
+  border: none;
+  width: 100px;
+  height: 30px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.like_btn {
+  background-color: var(--azul);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.typePost {
+  border: 2px solid var(--azul);
+  border-radius: 5px;
+  color: black;
+  padding: 15px;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  width: 98%;
+}
+
+.postsArea {
+  border: 2px solid var(--vermelho);
+  border-radius: 5px;
+  color: var(--azul);
+  padding: 5px;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  width: 98%;
+}
+
+.posts {
+  border: 2px solid var(--vermelho);
+  width: 100%;
+  margin: 30px;
+}
+
+.txtArea {
+  border: 2px solid var(--amarelo);
+  width: 100%;
+}
+
+textarea {
+  resize: none;
+  border-style: none;
+  border-color: transparent;
+  overflow: auto;
+}
+
+.postList {
+  border: 2px solid var(--azul);
+  min-height: 50px;
+  width: 99%;
+  font-size: 20px;
+  color: var(--azul);
+}
+
+.imgPost {
+  width: 40%;
+  align-self: center;
+}
+
+p {
+  padding: 5px;
+}
+
+h4 {
+  margin-top: 25px;
+  margin-bottom: 10px;
 }

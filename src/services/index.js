@@ -51,7 +51,7 @@ export const logout = () => {
   });
 };
 
-export const postar = (text) => {
+export const postar = (text, image) => {
   const user = firebase.auth().currentUser;
   const ordenar = new Date();
   const today = new Date();
@@ -67,11 +67,61 @@ export const postar = (text) => {
     ord: ordenar,
   };
 
-  const postsCollection = firebase.firestore().collection('posts');
-  postsCollection.add(post).then(res => {
-    // Apenas limpa o campo
-    document.getElementById('postText').value = '';
-  });
+  if (!image) {
+    const postsCollection = firebase.firestore().collection('posts');
+    postsCollection.add(post).then(res => {
+      document.getElementById('postText').value = '';
+    });
+
+    return true;
+  }
+
+  console.log(image);
+
+  const parts = image.name.split('.');
+  const name = Date.now() + parts[parts.length - 1];
+  const storage = firebase.storage().ref(name);
+  const upload = storage.put(image);
+
+  //update progress bar
+  upload.on(
+    "state_changed",
+    function(snapshot){
+      // Observe state change events such as progress, pause, and resume
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case firebase.storage.TaskState.PAUSED: // or 'paused'
+          console.log('Upload is paused');
+          break;
+        case firebase.storage.TaskState.RUNNING: // or 'running'
+          console.log('Upload is running');
+          break;
+      }
+    },
+    function error(e) {
+      console.log(e);
+      alert(e);
+    },
+
+    function complete() {
+      storage
+        .getDownloadURL()
+        .then(function (url) {
+          post["imageUrl"] = url;
+          const postsCollection = firebase.firestore().collection('posts');
+          postsCollection.add(post).then(res => {
+            document.getElementById('postText').value = '';
+            document.getElementById('file').value = '';
+
+          });
+        })
+        .catch(function (error) {
+          console.log("error encountered");
+        });
+    }
+  );
 };
 
 export const redirect = () => window.location.hash = '#welcome';
