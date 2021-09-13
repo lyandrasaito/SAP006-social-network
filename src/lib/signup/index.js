@@ -7,7 +7,7 @@ export default () => {
         <div class="content flexBox">
             <div class="area flexBox">
                 <h3 class="flexBox">Cadastro</h3>
-                <img src="img/icon.jpeg" width="30%"/> 
+                <img src="img/icon.png" class="icon"/> 
                 <form class="flexBox" id="signUp">
                     <!--<input type="text" id="nome" class="field" placeholder="Nome: ">-->
                     <input type="email" id="email" class="field" placeholder="E-mail: " required />
