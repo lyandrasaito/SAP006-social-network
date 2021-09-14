@@ -5,7 +5,7 @@ export default () => {
 
   const template = `
         <div class="content flexBox">
-            <div class="area flexBox">
+            <div class="area flexBox borda">
                 <h3 class="flexBox">Cadastro</h3>
                 <img src="img/icon.png" class="icon"/> 
                 <form class="flexBox" id="signUp">

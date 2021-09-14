@@ -5,7 +5,7 @@ export default () => {
 
   const template = `
         <div class="content flexBox">
-            <div class="area flexBox">
+            <div class="area flexBox borda">
                 <h3 class="flexBox">Login</h3>
                 <img src="img/icon.png" class="icon"/> 
                 <form class="flexBox" id="loginForm">
@@ -13,7 +13,7 @@ export default () => {
                     <input type="password" id="senha" class="field" placeholder="Senha: ">
                     <button type="submit" class="button" id="entrar">Entrar</button>
                 </form>
-                <button class="button" id="google">Google</button>
+                <button class="button" id="google">Login com Google</button>
                 <button id="back" class="button">Voltar</button>
             </div>
         </div>
