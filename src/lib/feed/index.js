@@ -68,7 +68,7 @@ export default () => {
     // Se o user estiver logado, renderiza 
     if (user) {
       const template = `
-        <div class="content flexBox">
+        <div class="contentFeed flexBox">
             <div class="area flexBox">
                 <img src="img/icon.png" class="icon"/>
                 <h2>Compartilhe sua arte: </h2> 
@@ -79,10 +79,9 @@ export default () => {
                     <button type="submit" class="button">Enviar</button>
                     <button type="" id="logout" class="button">Sair</button>
                 </form>
-
-                <div class="postsArea flexBox">
+                <div class="postsArea ">
                   <h3 class="flexBox">Feed</h3>
-                  <p id="posts" class=""> </p>
+                  <p id="posts" class="flexBox"> </p>
                 </div>
             </div>
         </div>
@@ -127,24 +126,25 @@ export default () => {
 
         // configura id e classe
         postElement.id = post.id;
-        postElement.className += "posts flexBox";
+        postElement.className += "posts";
 
         // configura conteudo 
         postElement.innerHTML = `
-          <p class="flexBox">
-             <textarea class="txtArea flexBox" disabled>${post.text}</textarea>
-              ${post.data} | 
-              ${post.email}   
-              ${post.imageUrl ? `<img class="imgPost flexBox" src='${post.imageUrl}'` : ""}
-
+          <dl class="flexBox">
+             <textarea class="txtArea flexBox" disabled style="overflow:hidden">${post.text}</textarea>
+             
+             <dt class="flexBox">${post.data}</dt>
+             <dt class="flexBox">${post.email} </dt>
+             <dt class="flexBox">${post.imageUrl ? `<img class="imgPost flexBox" src='${post.imageUrl}'` : ""} </dt>
               <span ><span class="no-likes">${post.numLikes || 0}</span> <button data-func="${userLiked ? "unlike" : "like"}"  class="like_btn" style="color: ${userLiked ? "red" : "white"}">❤</button> </span>
-
               ${isOwner ? showButtons(post) : ''}
-          </p>
+              
+          </dl>
     `;
 
         // Adiciona listener para os botões
         postElement.addEventListener("click", (event) => {
+          event.preventDefault();
           // Botão Editar
           if (event.target.dataset.func === "edit") {
             // Checa se o texto é editar ou salvar
