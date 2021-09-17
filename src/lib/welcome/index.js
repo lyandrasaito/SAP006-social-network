@@ -1,9 +1,7 @@
-/*template strings e eventos das boas vindas*/
-
 export default () => {
-    const container = document.createElement('div');
+  const container = document.createElement('div');
 
-    const template = `
+  const template = `
         <div class="content flexBox">
             <!--<div class="mondrian">-->
                 <div class="area flexBox borda">
@@ -18,18 +16,17 @@ export default () => {
             <!--</div>-->
         </div>
     `;
-    container.innerHTML = template;
+  container.innerHTML = template;
 
-    const entrar = container.querySelector('#entrar');
-    const cadastrar = container.querySelector('#cadastrar');
+  const entrar = container.querySelector('#entrar');
+  const cadastrar = container.querySelector('#cadastrar');
 
-    entrar.addEventListener('click', () => {
-        window.location.hash = '#login';
-    });
+  entrar.addEventListener('click', () => {
+    window.location.hash = '#login';
+  });
 
-    cadastrar.addEventListener('click', () => {
-        window.location.hash = '#signup';
-    });
-    return container;
-}
-
+  cadastrar.addEventListener('click', () => {
+    window.location.hash = '#signup';
+  });
+  return container;
+};

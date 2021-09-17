@@ -1,4 +1,4 @@
-import { entrar, logarGoogle, redirect } from '../../services/index.js';
+import { login, googleLogin, redirect } from '../../services/index.js';
 
 export default () => {
   const container = document.createElement('div');
@@ -28,22 +28,20 @@ export default () => {
     const email = loginForm['email'].value;
     const senha = loginForm['senha'].value;
 
-    entrar(email, senha);
-
-    console.log(email, senha);
+    login(email, senha);
   });
 
   const google = container.querySelector('#google');
   google.addEventListener('click', (e) => {
     e.preventDefault();
-    logarGoogle();
+    googleLogin();
   });
 
   const goBack = container.querySelector('#back');
   goBack.addEventListener('click', (e) => {
     e.preventDefault();
     redirect();
-  })
+  });
 
   return container;
 };

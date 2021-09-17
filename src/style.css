@@ -17,20 +17,17 @@ form {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /*border: 9px solid green;*/
 }
 
 .content {
   width: 100%;
   height: 100vh;
   background-color: var(--yellow);
-  /*border: 2px solid var(--red);*/
 }
 
 .contentFeed {
   width: 100%;
-  background-color: var(--yellow);
-  /*border: 2px solid var(--red);*/
+  background-color: var(--red);
 }
 
 .area {
@@ -56,7 +53,6 @@ form {
 .borda {
   border: 5px solid black;
   border-radius: 5px;
-  /*border-image: url(./img/mondrian.png) 30% round;*/
 }
 
 .field {
@@ -124,7 +120,6 @@ form {
 }
 
 .postsArea {
-  /*border: 2px solid var(--red);*/
   width: 100%;
   border-radius: 5px;
   color: var(--blue);
@@ -156,7 +151,7 @@ textarea {
   resize: none;
   border-style: none;
   border-color: transparent;
-
+  overflow: auto;
 }
 
 .postList {

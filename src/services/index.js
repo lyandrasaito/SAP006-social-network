@@ -1,4 +1,4 @@
-export const cadastrar = (email, senha) => {
+export const register = (email, senha) => {
   firebase.auth().createUserWithEmailAndPassword(email, senha).then(() => {
     window.location.hash = '#feed';
   }).catch((error) => {
@@ -15,7 +15,7 @@ export const cadastrar = (email, senha) => {
   });
 };
 
-export const entrar = (email, senha) => {
+export const login = (email, senha) => {
   firebase.auth().signInWithEmailAndPassword(email, senha).then(() => {
     window.location.hash = '#feed';
   }).catch((error) => {
@@ -26,7 +26,7 @@ export const entrar = (email, senha) => {
   });
 };
 
-export const logarGoogle = () => {
+export const googleLogin = () => {
   const provider = new firebase.auth.GoogleAuthProvider();
 
   firebase.auth()
@@ -51,7 +51,7 @@ export const logout = () => {
   });
 };
 
-export const postar = (text, image) => {
+export const sendPost = (text, image) => {
   const user = firebase.auth().currentUser;
   const ordenar = new Date();
   const today = new Date();
@@ -76,26 +76,21 @@ export const postar = (text, image) => {
     return true;
   }
 
-  console.log(image);
-
   const parts = image.name.split('.');
   const name = Date.now() + parts[parts.length - 1];
   const storage = firebase.storage().ref(name);
   const upload = storage.put(image);
 
-  //update progress bar
   upload.on(
     "state_changed",
-    function(snapshot){
-      // Observe state change events such as progress, pause, and resume
-      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    function (snapshot) {
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log('Upload is ' + progress + '% done');
       switch (snapshot.state) {
-        case firebase.storage.TaskState.PAUSED: // or 'paused'
+        case firebase.storage.TaskState.PAUSED:
           console.log('Upload is paused');
           break;
-        case firebase.storage.TaskState.RUNNING: // or 'running'
+        case firebase.storage.TaskState.RUNNING:
           console.log('Upload is running');
           break;
       }
@@ -125,3 +120,57 @@ export const postar = (text, image) => {
 };
 
 export const redirect = () => window.location.hash = '#welcome';
+
+const db = firebase.firestore();
+const postsRef = db.collection('posts');
+
+export const likePost = (userId, postId) => {
+  const postRef = postsRef.doc(postId);
+  return db.runTransaction((transaction) => {
+    return transaction.get(postRef).then((res) => {
+      if (!res.exists) {
+        throw "Post não existe!";
+      }
+
+      const newNumLikes = (res.data().numLikes || 0) + 1;
+
+      transaction.update(postRef, {
+        numLikes: newNumLikes,
+      });
+
+      transaction.set(postRef, { likes: { [userId]: true } }, { merge: true });
+    });
+  });
+};
+
+export const unlikePost = (userId, postId) => {
+  const postRef = postsRef.doc(postId);
+
+  return db.runTransaction((transaction) => {
+    return transaction.get(postRef).then((res) => {
+      if (!res.exists) {
+        throw "Post não existe!";
+      }
+
+      const newNumLikes = (res.data().numLikes) - 1;
+
+      transaction.update(postRef, {
+        numLikes: newNumLikes,
+      });
+      transaction.update(postRef, { likes: { [userId]: false } });
+    });
+  });
+};
+
+export const deletePost = (postId) => {
+  const postsCollection = firebase.firestore().collection('posts');
+  postsCollection.doc(postId).delete().then(doc => {
+  });
+};
+
+export const editPost = (id, newText) => {
+  const postsCollection = firebase.firestore().collection('posts');
+  postsCollection.doc(id).update({
+    text: newText,
+  });
+};
