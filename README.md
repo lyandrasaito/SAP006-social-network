@@ -10,13 +10,22 @@ Na sociologia, o conceito de rede social é utilizado para analisar interações
 Através da aplicação é possível descobrir novos artistas, se inspirar e também começar a sua Artem! Desta maneira, torna-se fácil encontrar novas pessoas e também saber um pouco mais sobre diferentes tipos de artes, com um design moderno, simples e interface amigável. 
   
   
-<div align="center">  Acesse a Artem:    https://artem-9a4b9.web.app/  </div>
+<div align="center">  
+  Acesse a Artem:    https://artem-9a4b9.web.app/  
+    
   
-
+  
+  
 A Artem foi desenvolvida pelas alunas da Laboratória: 
-Kamila Moura, Lyandra Saito e Thaiane Cristine. 
   
-
+<a href="https://github.com/lyandrasaito">Lyandra Saito</a>
+  
+<a href="https://github.com/KamilaMoura1">Kamila Moura</a>
+  
+<a href="https://github.com/thaianecristine">Thaiane Cristine</a>
+  
+  
+</div>
 
 ## Identidade visual
 
