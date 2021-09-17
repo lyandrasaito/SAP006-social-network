@@ -1,4 +1,4 @@
-import { cadastrar, redirect } from '../../services/index.js';
+import { register, redirect } from '../../services/index.js';
 
 export default () => {
   const container = document.createElement('div');
@@ -21,23 +21,22 @@ export default () => {
 
   container.innerHTML = template;
 
-  const formCadastro = container.querySelector('#signUp');
-  formCadastro.addEventListener('submit', (e) => {
+  const signupForm = container.querySelector('#signUp');
+  signupForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = signUp['email'].value;
     const senha = signUp['senha'].value;
 
     console.log(email, senha);
 
-    cadastrar(email, senha);
+    register(email, senha);
   });
-
 
   const goBack = container.querySelector('#back');
   goBack.addEventListener('click', (e) => {
     e.preventDefault();
     redirect();
-  })
+  });
 
   return container;
 };
