@@ -1,7 +1,6 @@
 <div align="center"> <img src="https://github.com/lyandrasaito/SAP006-social-network/blob/main/src/img/icon.png" width="20%" /> </div>
 <div align="center"> <img src="https://github.com/lyandrasaito/SAP006-social-network/blob/main/src/img/logo.png" width="20%" /> </div>
 
-
 # Boas vindas à Artem!
 <div align="justify">
 A Artem é uma rede social voltada para o compartilhamento de conteúdos artísticos, desenvolvida para a proposta do bootcamp Labotarória, na sexta geração. Na aplicação, é possível efetuar um cadastro ou login (e-mail e senha ou por sua conta Google), e aceder ao Feed, onde são compartilhadas postagens artísticas de qualquer área, como fotografia, pinturas, poemas e muito mais. 
@@ -21,11 +20,17 @@ As cores, logotipo e ícone da aplicação, bem como todo o conceito artístico 
 Algumas características do De Stijl estão:
 
 • O purismo, a clareza e as formas simples;
+  
 • O domínio das cores primárias azul, vermelho e amarelo;
+  
 • A presença de figuras geométricas e traços;
+  
 • A prevalência do ângulo reto (que se tornou um símbolo da corrente);
+  
 • A redução das formas para chegar aos seus elementos essenciais, como cubos e linhas;
+  
 • A saturação das cores;
+  
 • A valorização do equilíbrio. 
 
 <img src="https://github.com/lyandrasaito/SAP006-social-network/blob/main/src/img/mondrian.png" width="20%" /> 
@@ -34,10 +39,16 @@ Algumas características do De Stijl estão:
 ## Prototipagem e Planejamento
 
 Inicialmente, para organizar o fluxo da aplicação e mensurar posicionamentos de itens e cores, foram desenvolvidos protótipos de baixa e de alta fidelidade, na plataforma Figma. Os protótipos foram iterados conforme testes de usabilidade e opinião de usuários com diferentes dispositivos de acesso, além das próprias desenvolvedoras da aplicação. 
-img design
+  
+  
+<img src="https://github.com/lyandrasaito/SAP006-social-network/blob/main/src/img/prototipagem.png" width="30%" />
+  
+  
 
 O planejamento do projeto se deu na plataforma Trello, trabalhando em Sprints, seguindo a metodologia ágil (Scrum), no modelo Kanban, que auxilia no controle de tarefas que estão em andamento, abertas ou concluídas.
-img trello
+
+  
+<img src="https://github.com/lyandrasaito/SAP006-social-network/blob/main/src/img/trello.png" />
 
 ## Histórias de usuários (funcionalidades)
 
@@ -60,6 +71,11 @@ Todas as funcionalidades da aplicação foram implementadas seguindo histórias 
 • Como usuário, desejo postar imagens
 
 ## Exemplos e demonstração
+As cores e saturação podem variar conforme os frames dos vídeos.
+  
+### Feed com responsividade
+  
+<img src="https://github.com/lyandrasaito/SAP006-social-network/blob/main/src/img/feed.png" />   
   
 ### Cadastro
   
@@ -72,9 +88,7 @@ https://user-images.githubusercontent.com/17890206/133734086-9e73c0ce-d42a-4047-
 ### Postar, editar, excluir e curtir
   
 https://user-images.githubusercontent.com/17890206/133734095-3ec2e6a6-fe53-4f99-a3c8-ca9176bd59da.mp4
-  
-### Feed com responsividade
-<img src="" /> 
+
 
 ## Responsividade e testes de usabilidade 
 Devido a importância da premissa Mobile first, a cada deploy da aplicação, todas funcionalidades desenvolvidas foram testadas por diversos usuários acessando a rede social de diferentes dispositivos, de modo a testar e garantir a responsividade das janelas.
