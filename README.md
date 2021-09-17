@@ -8,9 +8,14 @@ A Artem é uma rede social voltada para o compartilhamento de conteúdos artíst
 Na sociologia, o conceito de rede social é utilizado para analisar interações entre indivíduos, grupos, organizações ou até sociedades inteiras desde o final do século XIX. A partir da década de 90, as redes sociais também migraram para o ambiente virtual, nesse intuito pensamos na Artem, uma rede social criada para a comunidade das artes, pensada em trazer a arte para cada usuário de forma simples e intuitiva.
 
 Através da aplicação é possível descobrir novos artistas, se inspirar e também começar a sua Artem! Desta maneira, torna-se fácil encontrar novas pessoas e também saber um pouco mais sobre diferentes tipos de artes, com um design moderno, simples e interface amigável. 
+  
+  
+<div align="center">  Acesse a Artem:    https://artem-9a4b9.web.app/  </div>
+  
 
 A Artem foi desenvolvida pelas alunas da Laboratória: 
 Kamila Moura, Lyandra Saito e Thaiane Cristine. 
+  
 
 
 ## Identidade visual
